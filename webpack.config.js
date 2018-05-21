@@ -20,41 +20,41 @@ let webpack_config = {
   //解析规则
   module: {
     rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: "babel-loader"
-    },
-    {
-      test: /\.css$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader?importLoaders=1',
-        'postcss-loader'
-      ]
-    },
-    {
-      test: /\.less$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        "css-loader",
-        "postcss-loader",
-        "less-loader",
-      ]
-    },
-    {
-      // 解决html 内img src路径问题
-      test: /\.html$/,
-      use: {
-        loader: 'html-loader'
-      }
-    },
-    {
-      //图片解析打包
-      // 图片加载器，雷同file-loader，更适合图片，可以将较小的图片转成base64，减少http请求
-      // 如下配置，将小于8192byte的图片转成base64码
-      test: /\.(png|jpg|gif|jpeg)$/,
-      loader: 'url-loader?limit=8192&name=./img/[name].[hash:6].[ext]',
-    },
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader?importLoaders=1',
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+          "less-loader",
+        ]
+      },
+      {
+        // 解决html 内img src路径问题
+        test: /\.html$/,
+        use: {
+          loader: 'html-loader'
+        }
+      },
+      {
+        //图片解析打包
+        // 图片加载器，雷同file-loader，更适合图片，可以将较小的图片转成base64，减少http请求
+        // 如下配置，将小于8192byte的图片转成base64码
+        test: /\.(png|jpg|gif|jpeg)$/,
+        loader: 'url-loader?limit=8192&name=./img/[name].[hash:6].[ext]',
+      },
       // {
       //     // 专供iconfont方案使用的，后面会带一串时间戳，需要特别匹配到
       //     test: /\.(woff|woff2|svg|eot|ttf)\??.*$/,
@@ -104,7 +104,42 @@ let webpack_config = {
     //     maxInitialRequests: 3,
     //     name: true
     // })
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        // 提取 node_modules 中代码
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
+        },
+        commons: {
+          // async 设置提取异步代码中的公用代码
+          chunks: "async",
+          name: 'commons-async',
+          /**
+           * minSize 默认为 30000
+           * 想要使代码拆分真的按照我们的设置来
+           * 需要减小 minSize
+           */
+          minSize: 0,
+          // 至少为两个 chunks 的公用代码
+          minChunks: 2
+        }
+      }
+    },
+    /**
+     * 对应原来的 minchunks: Infinity
+     * 提取 webpack 运行时代码
+     * 直接置为 true 或设置 name
+     */
+    runtimeChunk: {
+      name: 'manifest'
+    }
+  }
+
 }
 
 webpack_config.plugins = webpack_config.plugins.concat(entryConfig.htmlWebpackPlugin());
@@ -113,3 +148,4 @@ webpack_config.plugins = webpack_config.plugins.concat(entryConfig.htmlWebpackPl
 
 
 module.exports = webpack_config
+
