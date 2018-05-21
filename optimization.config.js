@@ -1,8 +1,19 @@
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
+
 module.exports = {
   runtimeChunk: {
     name: 'manifest'
   },
-  minimizer: true, // [new UglifyJsPlugin({...})]
+  minimizer: [
+    new UglifyJsPlugin({
+      cache: true,
+      parallel: true,
+      sourceMap: true
+    }),
+    new OptimizeCSSAssetsPlugin({}) // use OptimizeCSSAssetsPlugin
+  ],
   splitChunks: {
     chunks: 'async',
     minSize: 30000,
@@ -19,7 +30,7 @@ module.exports = {
         test: /node_modules\/(.*)\.js/
       },
       styles: {
-        name: 'styles',
+        name: 'app.style',
         test: /\.(less|css)$/,
         chunks: 'all',
         minChunks: 1,

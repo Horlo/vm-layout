@@ -21,6 +21,7 @@
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
     "mini-css-extract-plugin": "^0.4.0",
+    "optimize-css-assets-webpack-plugin": "^4.0.1",
     "postcss-aspect-ratio-mini": "0.0.2",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^11.1.0",
@@ -28,6 +29,7 @@
     "postcss-url": "^7.3.2",
     "postcss-viewport-units": "^0.1.4",
     "postcss-write-svg": "^3.0.1",
+    "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
     "webpack-cli": "^2.1.3"
   },
