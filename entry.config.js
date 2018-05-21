@@ -25,7 +25,7 @@ module.exports = {
         minify: {
           removeAttributeQuotes: false //压缩 去掉引号
         },
-        chunks: [_file]
+        chunks: [_file, 'vendors', 'commons-async','manifest']
       });
       arr.push(obj);
     })

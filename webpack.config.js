@@ -5,6 +5,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const entryConfig = require('./entry.config');
+const optimization = require('./optimization.config');
+
 let webpack_config = {
   // 多入口文件
   entry: {
@@ -15,7 +17,7 @@ let webpack_config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].bundle.js',
-    publicPath: "./"
+    publicPath: "./",
   },
   //解析规则
   module: {
@@ -24,14 +26,14 @@ let webpack_config = {
         exclude: /node_modules/,
         loader: "babel-loader"
       },
-      // {
-      //   test: /\.css$/,
-      //   use: [
-      //     MiniCssExtractPlugin.loader,
-      //     'css-loader?importLoaders=1',
-      //     'postcss-loader'
-      //   ]
-      // },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader?importLoaders=1',
+          'postcss-loader'
+        ]
+      },
       {
         test: /\.less$/,
         use: [
@@ -55,11 +57,11 @@ let webpack_config = {
         test: /\.(png|jpg|gif|jpeg)$/,
         loader: 'url-loader?limit=8192&name=./img/[name].[hash:6].[ext]',
       },
-      // {
-      //     // 专供iconfont方案使用的，后面会带一串时间戳，需要特别匹配到
-      //     test: /\.(woff|woff2|svg|eot|ttf)\??.*$/,
-      //     loader: 'file?name=./fonts/[name].[ext]',
-      // },
+      {
+        // 专供iconfont方案使用的，后面会带一串时间戳，需要特别匹配到
+        test: /\.(woff|woff2|svg|eot|ttf)\??.*$/,
+        loader: 'file?name=./fonts/[name].[ext]',
+      },
     ]
   },
   devServer: { //配置此静态文件服务器，可以用来预览打包后项目
@@ -95,57 +97,49 @@ let webpack_config = {
       from: path.resolve(__dirname, 'src/static'),
       to: './static'
     }]),
-    //公共js模块打包插件
-    // new webpack.optimize.SplitChunksPlugin({
-    //     chunks: "all",
-    //     minSize: 20000,
-    //     minChunks: 1,
-    //     maxAsyncRequests: 5,
-    //     maxInitialRequests: 3,
-    //     name: true
-    // })
   ],
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      cacheGroups: {
-        // 提取 node_modules 中代码
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all"
-        },
-        commons: {
-          // async 设置提取异步代码中的公用代码
-          chunks: "async",
-          name: 'commons-async',
-          /**
-           * minSize 默认为 30000
-           * 想要使代码拆分真的按照我们的设置来
-           * 需要减小 minSize
-           */
-          minSize: 0,
-          // 至少为两个 chunks 的公用代码
-          minChunks: 2
-        },
-        // styles: {
-        //   name: 'styles',
-        //   test: /\.less$/,
-        //   chunks: 'all',
-        //   enforce: true
-        // }
-      }
-    },
-    /**
-     * 对应原来的 minchunks: Infinity
-     * 提取 webpack 运行时代码
-     * 直接置为 true 或设置 name
-     */
-    runtimeChunk: {
-      name: 'manifest'
-    }
-  }
+  optimization,
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: "all",
+  //     cacheGroups: {
+  //       // 提取 node_modules 中代码
+  //       vendors: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: "vendors",
+  //         chunks: "all"
+  //       },
+  //       commons: {
+  //         // async 设置提取异步代码中的公用代码
+  //         chunks: "async",
+  //         name: 'commons-async',
+  //         /**
+  //          * minSize 默认为 30000
+  //          * 想要使代码拆分真的按照我们的设置来
+  //          * 需要减小 minSize
+  //          */
+  //         minSize: 0,
+  //         // 至少为两个 chunks 的公用代码
+  //         minChunks: 2
+  //       },
+  //       // styles: {
+  //       //   name: 'styles',
+  //       //   test: /\.(css|less)$/,
+  //       //   chunks: 'all',
+  //       //   enforce: true
+  //       // }
+  //     }
+  //   },
+  //   /**
+  //    * 对应原来的 minchunks: Infinity
+  //    * 提取 webpack 运行时代码
+  //    * 直接置为 true 或设置 name
+  //    */
+  //   runtimeChunk: {
+  //     name: 'manifest'
+  //   }
 
+  // }
 }
 
 webpack_config.plugins = webpack_config.plugins.concat(entryConfig.htmlWebpackPlugin());
