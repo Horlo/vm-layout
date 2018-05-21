@@ -24,14 +24,14 @@ let webpack_config = {
         exclude: /node_modules/,
         loader: "babel-loader"
       },
-      {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader?importLoaders=1',
-          'postcss-loader'
-        ]
-      },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     MiniCssExtractPlugin.loader,
+      //     'css-loader?importLoaders=1',
+      //     'postcss-loader'
+      //   ]
+      // },
       {
         test: /\.less$/,
         use: [
@@ -127,7 +127,13 @@ let webpack_config = {
           minSize: 0,
           // 至少为两个 chunks 的公用代码
           minChunks: 2
-        }
+        },
+        // styles: {
+        //   name: 'styles',
+        //   test: /\.less$/,
+        //   chunks: 'all',
+        //   enforce: true
+        // }
       }
     },
     /**
@@ -143,9 +149,5 @@ let webpack_config = {
 }
 
 webpack_config.plugins = webpack_config.plugins.concat(entryConfig.htmlWebpackPlugin());
-
-
-
-
 module.exports = webpack_config
 
