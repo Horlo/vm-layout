@@ -9,8 +9,7 @@ let webpack_config = {
   // 多入口文件
   entry: {
     // index: './src/entry/index.js',
-    // demo1: './src/entry/demo1.js',
-    ...entryConfig.entry,
+    ...entryConfig.entry(),
   },
   //打包输出
   output: {
@@ -82,16 +81,6 @@ let webpack_config = {
     //     },
     //     chunks: ['index']
     // }),
-    // new HtmlWebpackPlugin({
-    //     template: path.resolve(__dirname, 'src/pages', 'demo1.html'), //模板
-    //     filename: 'demo1.html',
-    //     hash: true, //防止缓存
-    //     minify: {
-    //         removeAttributeQuotes: false //压缩 去掉引号
-    //     },
-    //     chunks: ['demo1']
-    // }),
-
     // css配置
     new MiniCssExtractPlugin({
       path: path.resolve(__dirname, 'dist'),
@@ -115,45 +104,7 @@ let webpack_config = {
     //     maxInitialRequests: 3,
     //     name: true
     // })
-  ],
-  /**
-* 优化部分包括代码拆分
-* 且运行时（manifest）的代码拆分提取为了独立的 runtimeChunk 配置
-*/
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      cacheGroups: {
-        // 提取 node_modules 中代码
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all"
-        },
-        commons: {
-          // async 设置提取异步代码中的公用代码
-          chunks: "async",
-          name: 'commons-async',
-          /**
-           * minSize 默认为 30000
-           * 想要使代码拆分真的按照我们的设置来
-           * 需要减小 minSize
-           */
-          minSize: 0,
-          // 至少为两个 chunks 的公用代码
-          minChunks: 2
-        }
-      }
-    },
-    /**
-   * 对应原来的 minchunks: Infinity
-   * 提取 webpack 运行时代码
-   * 直接置为 true 或设置 name
-   */
-    runtimeChunk: {
-      name: 'manifest'
-    }
-  }
+  ]
 }
 
 webpack_config.plugins = webpack_config.plugins.concat(entryConfig.htmlWebpackPlugin());
