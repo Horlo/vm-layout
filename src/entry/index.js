@@ -1,2 +1,1 @@
- import "../assets/css/mixin.less";
- import '../assets/css/app.css'
+ import '../assets/less/app.less'
