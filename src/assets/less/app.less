@@ -1,14 +1,13 @@
 @import "./mixin.less";
-
-.hairlines{
-  border-width:0.5px
+.hairlines {
+  border-width: 0.5px
 }
 
 // 颜色定义
 @gray: #797777;
 @black: #141414;
 @blue: #067fce;
-@grayB: #f4f4f4;
+@border-color: #f4f4f4;
 //文字大小
 @fs: 26px;
 @fm_s: 28px;
@@ -61,14 +60,91 @@ table td {
   zoom: 1;
 }
 
-//  页面样式开始开始
-.mui-content {
-  background-color: #eceff1;
+// 1px 解决方案
+.radius-border,
+.border-left,
+.border-right,
+.border-top,
+.border-bottom {
+  position: relative;
+  border: none;
+}
+
+.border-left:before {
+  content: "";
+  pointer-events: none;
+  box-sizing: border-box;
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  left: 0;
+  top: 0;
+  border: 1px solid @border-color;
+  transform: scaleX(0.5);
+  transform-origin: 0 0;
+}
+
+.border-right:before {
+  content: "";
+  pointer-events: none;
+  box-sizing: border-box;
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  right: 0;
+  top: 0;
+  border: 1px solid @border-color;
+  transform: scaleX(0.5);
+  transform-origin: 0 0;
+}
+
+.border-top:before {
+  content: "";
+  pointer-events: none;
+  box-sizing: border-box;
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  left: 0;
+  top: 0;
+  border: 1px solid @border-color;
+  transform: scaleY(0.5);
+  transform-origin: 0 0;
+}
+
+.border-bottom:before {
+  content: "";
+  pointer-events: none;
+  box-sizing: border-box;
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  left: 0;
+  top: 0;
+  border: 1px solid @border-color;
+  transform: scaleY(0.5);
+  transform-origin: 0 0;
+}
+
+.radius-border:before {
+  content: "";
+  pointer-events: none;
+  box-sizing: border-box;
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: 0;
+  top: 0;
+  border-radius: 15px;
+  border: 1px solid @border-color;
+  transform: scale(0.5);
+  transform-origin: 0 0;
 }
 
 
 
-
-
-
+//  页面样式开始开始
+.mui-content {
+  background-color: #eceff1;
+}
 
