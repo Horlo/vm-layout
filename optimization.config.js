@@ -12,32 +12,24 @@ module.exports = {
       parallel: true,
       sourceMap: true
     }),
-    new OptimizeCSSAssetsPlugin({}) // use OptimizeCSSAssetsPlugin
+    new OptimizeCSSAssetsPlugin() // use OptimizeCSSAssetsPlugin
   ],
   splitChunks: {
-    chunks: 'async',
-    minSize: 30000,
-    minChunks: 1,
-    maxAsyncRequests: 5,
-    maxInitialRequests: 3,
-    name: false,
     cacheGroups: {
-      vendor: {
-        name: 'vendor',
-        chunks: 'initial',
-        priority: -10,
-        reuseExistingChunk: false,
-        test: /node_modules\/(.*)\.js/
+      common: {
+        chunks: "initial",
+        name: "common",
+        minChunks: 2,
+        maxInitialRequests: 5,
+        minSize: 0
       },
-      styles: {
-        name: 'app.style',
-        test: /\.(less|css)$/,
-        chunks: 'all',
-        minChunks: 1,
-        reuseExistingChunk: true,
-        enforce: true
+      vendor: {
+        test: /node_modules/,
+        chunks: "initial",
+        name: "vendor",
+        priority: 10,
+        enforce: true      
       }
     }
   }
 }
-
